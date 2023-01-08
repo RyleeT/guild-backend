@@ -58,14 +58,18 @@ export class ChatGateway implements OnGatewayDisconnect {
 
     const user = await this.userService.updateSocketId(userId, client.id);
 
-    client.broadcast.emit('user', user);
-    console.info('User connected: ', user.username, client.id);
+    if (user) {
+      client.broadcast.emit('user', user);
+      console.info('User connected: ', user.username, client.id);
+    }
   }
 
   async handleDisconnect(client: Socket) {
     const user = await this.userService.removeSocketId(client.id);
 
-    client.broadcast.emit('user', user);
-    console.info('User disconnected: ', user.username, client.id);
+    if (user) {
+      client.broadcast.emit('user', user);
+      console.info('User disconnected: ', user.username, client.id);
+    }
   }
 }
